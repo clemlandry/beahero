@@ -412,18 +412,19 @@ const gPlayer = document.getElementById("global-player");
 function openClipSheet(){
   if (!clipSheet || !sheetBody || !gPlayer) return;
   sheetBody.appendChild(gPlayer);
-  gPlayer.style.display = "block";          // on montre la vidéo
+  // NE PAS mettre display:block ici; le CSS du sheet gère l'affichage
   clipSheet.classList.add("open");
   clipSheet.setAttribute("aria-hidden", "false");
-  // ❗️On NE met PAS play ici : on suppose que la lecture est déjà en cours
 }
+
 function closeClipSheet(){
   if (!clipSheet || !dock || !gPlayer) return;
   dock.appendChild(gPlayer);
-  gPlayer.style.display = "none";           // cache la vidéo mais laisse l'audio jouer
+  // ❗️NE PAS faire display:none -> la musique continuerait sans pause
   clipSheet.classList.remove("open");
   clipSheet.setAttribute("aria-hidden", "true");
 }
+
 
 btnToggleClip?.addEventListener("click", ()=>{
   const isOpen = clipSheet.classList.contains("open");

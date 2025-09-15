@@ -54,8 +54,15 @@
 
 <!-- Dock pour ranger la vidéo quand le volet est fermé -->
 <div id="player-dock" hidden>
-  <video id="global-player" preload="metadata" style="width:100%; display:none"></video>
+  <video
+    id="global-player"
+    preload="metadata"
+    playsinline
+    webkit-playsinline
+    style="width:100%;"
+  ></video>
 </div>
+
 
 <!-- 🎬 Bottom sheet pour afficher le clip -->
 <div id="clip-sheet" aria-hidden="true">
