@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Wave — Artiste</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="brand">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12c4-4 8 4 12 0s8 4 8 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      <span>Wave</span>
+    </div>
+    <nav class="nav">
+      <a href="#/artist">Artiste</a>
+      <a href="#/search">Recherche</a>
+      <a href="#/library">Bibliothèque</a>
+    </nav>
+  </aside>
+
+  <main id="app"><!-- injecté par app.js --></main>
+
+  <!-- 🎵 Une SEULE barre lecteur en bas -->
+  <div class="player-bar">
+  <div class="np-info">
+    <div class="np-meta">
+      <div id="np-title">Rien en lecture</div>
+      <div id="np-artist">—</div>
+    </div>
+  </div>
+  <div class="np-controls">
+    <button id="btnPrev">⏮</button>
+    <button id="btnPlayPause">▶️</button>
+    <button id="btnNext">⏭</button>
+  </div>
+  <div class="np-progress">
+    <span id="np-current">0:00</span>
+    <input type="range" id="progress" value="0" min="0" max="100" />
+    <span id="np-duration">0:00</span>
+  </div>
+
+  <!-- Audio caché -->
+  <audio id="player"></audio>
+</div>
+
+
+  <script src="app.js" type="module"></script>
+</body>
+
+</html>

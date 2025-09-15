@@ -1,0 +1,240 @@
+:root{
+  --bg: #0f1115;
+  --panel: #151823;
+  --muted: #9aa3b2;
+  --text: #e7ebf3;
+  --accent: #4bd6a8; /* vert différent de Spotify */
+  --accent-2:#8ee5ff;
+  --card:#1a1f2b;
+  --card-hover:#21283a;
+  --radius:12px;
+}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0; background:linear-gradient(180deg,#0f1115,#10131a 60%); color:var(--text);
+  font: 15px/1.5 system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+  display:grid; grid-template-columns:260px 1fr; grid-template-rows:1fr 80px; grid-template-areas:
+    "sidebar app"
+    "sidebar np";
+}
+.player-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 90px;
+  background: #181818;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  font-size: 14px;
+  box-shadow: 0 -2px 6px rgba(0,0,0,0.4);
+}
+
+.np-info {
+  flex: 1;
+}
+
+.np-meta {
+  display: flex;
+  flex-direction: column;
+}
+
+.np-controls {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.np-controls button {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 22px;
+  cursor: pointer;
+}
+
+.np-controls button:hover {
+  color: #1db954; /* vert Spotify-like */
+}
+
+.np-progress {
+  flex: 2;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+#progress {
+  flex: 1;
+  appearance: none;
+  height: 4px;
+  background: #444;
+  border-radius: 2px;
+  cursor: pointer;
+}
+
+#progress::-webkit-slider-thumb {
+  appearance: none;
+  width: 12px;
+  height: 12px;
+  background: #1db954;
+  border-radius: 50%;
+  cursor: pointer;
+}
+/* ===== Banner / Hero ===== */
+.hero {
+  position: relative;
+  height: 260px;               /* ajuste la hauteur si tu veux */
+  border-radius: 16px;
+  overflow: hidden;
+  background-size: cover;
+  background-position: center;
+  transform: translateZ(0);    /* évite le jitter */
+  transition: opacity .2s ease;
+  margin-bottom: 18px;
+  border: 1px solid rgba(255,255,255,.06);
+}
+
+.hero .shade {
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(0,0,0,0) 30%, rgba(0,0,0,.7) 100%);
+  opacity: 0;                  /* on la fait monter au scroll */
+  transition: opacity .12s linear;
+}
+.banner .thumb {
+  width: 56px; height: 56px; border-radius: 10px; overflow: hidden;
+  border:1px solid rgba(255,255,255,.06);
+}
+.banner .thumb img { width:100%; height:100%; object-fit:cover; display:block; }
+
+.hero .hero-content {
+  position: absolute; left: 16px; bottom: 16px; right: 16px;
+  display: flex; align-items: end; gap: 14px;
+  z-index: 1;
+}
+.cover {
+  width: 160px;
+  height: 160px;
+  border-radius: 8px;
+  overflow: hidden; /* pour que l'image garde les coins arrondis */
+}
+
+.cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* remplit le carré sans déformer */
+}
+
+.hero .cover {
+  width: 84px; height: 84px; border-radius: 12px;
+  background: linear-gradient(135deg,#2a2f3d,#353d54);
+  border: 1px solid rgba(255,255,255,.08);
+  overflow: hidden; flex: 0 0 auto;
+}
+.hero .cover img { width: 100%; height: 100%; object-fit: cover; }
+
+.hero .meta h1 { margin: 0; font-size: 28px; }
+.hero .meta .sub { color: var(--muted); margin-top: 6px; }
+
+/* Facultatif : parallax léger */
+.hero.parallax {
+  will-change: transform;
+}
+
+.sidebar{
+  grid-area:sidebar; background:var(--panel); padding:16px 14px; border-right:1px solid rgba(255,255,255,.06);
+  display:flex; flex-direction:column; gap:24px; position:sticky; top:0; height:100vh;
+}
+.brand{display:flex; align-items:center; gap:10px; font-weight:700; letter-spacing:.3px}
+.brand svg{width:22px; height:22px; color:var(--accent)}
+.nav{display:flex; flex-direction:column; gap:10px}
+.nav a{
+  text-decoration:none; color:var(--muted); padding:10px 12px; border-radius:10px; transition:.15s background,.15s color;
+}
+.nav a:hover{background:rgba(255,255,255,.06); color:var(--text)}
+
+#app{
+  grid-area:app; padding:24px; overflow:auto;
+}
+
+.section{display:flex; flex-direction:column; gap:14px; margin-bottom:24px}
+.section h2{margin:0; font-size:20px}
+
+.artist-header{
+  background: linear-gradient(135deg, rgba(75,214,168,.18), rgba(142,229,255,.1));
+  border-radius: var(--radius);
+  padding:24px; display:grid; grid-template-columns:120px 1fr; gap:18px; align-items:center;
+}
+.artist-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* remplit le carré proprement */
+  border-radius: 14px;
+}
+
+.artist-meta h1{margin:0; font-size:28px}
+.artist-meta .subtitle{color:var(--muted); margin-top:6px}
+.chips{margin-top:10px; display:flex; flex-wrap:wrap; gap:8px}
+.chip{background:rgba(255,255,255,.06); padding:6px 10px; border-radius:999px; color:var(--muted); font-size:12px}
+
+.grid{
+  display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:14px;
+}
+.card{
+  background:var(--card); border:1px solid rgba(255,255,255,.06); border-radius:14px; padding:12px;
+  transition:.15s transform,.15s background; cursor:pointer; display:flex; flex-direction:column; gap:10px;
+}
+.card:hover{background:var(--card-hover); transform:translateY(-2px)}
+.card .cover{
+  aspect-ratio:1/1; border-radius:10px; background:linear-gradient(135deg,#333a52,#2a2f3d);
+  display:flex; align-items:center; justify-content:center; font-weight:700; border:1px solid rgba(255,255,255,.06);
+}
+.card .title{font-weight:600}
+.card .meta{color:var(--muted); font-size:12px}
+
+.banner{
+  background:linear-gradient(90deg, rgba(142,229,255,.16), rgba(75,214,168,.16));
+  border:1px solid rgba(255,255,255,.08);
+  padding:16px; border-radius:12px; display:flex; align-items:center; justify-content:space-between; gap:16px;
+}
+.banner .info{display:flex; align-items:center; gap:14px}
+.banner .thumb{
+  width:56px; height:56px; border-radius:10px; background:linear-gradient(135deg,#2a2f3d,#353d54);
+  border:1px solid rgba(255,255,255,.06);
+}
+.banner strong{display:block}
+
+.table{width:100%; border-collapse:collapse}
+.table th,.table td{padding:10px 6px; border-bottom:1px solid rgba(255,255,255,.06); text-align:left}
+.table th{color:var(--muted); font-weight:600; font-size:13px}
+.table tr:hover td{background:rgba(255,255,255,.04)}
+
+.btn{
+  background:transparent; color:var(--text); border:1px solid rgba(255,255,255,.18);
+  padding:8px 12px; border-radius:10px; cursor:pointer; transition:.15s background;
+}
+.btn:hover{background:rgba(255,255,255,.08)}
+.btn.primary{border-color:transparent; background:linear-gradient(135deg,var(--accent),var(--accent-2)); color:#0b0e13; font-weight:700}
+
+#now-playing{
+  grid-area:np; background:var(--panel); border-top:1px solid rgba(255,255,255,.06);
+  display:flex; align-items:center; justify-content:space-between; padding:10px 16px; gap:16px;
+}
+.np-info{display:flex; align-items:center; gap:12px}
+.np-cover{width:48px; height:48px; border-radius:8px; background:linear-gradient(135deg,#2a2f3d,#353d54); border:1px solid rgba(255,255,255,.06)}
+.np-title{font-weight:600}
+.np-artist{color:var(--muted); font-size:12px}
+
+@media (max-width: 900px){
+  body{grid-template-columns:1fr; grid-template-rows: auto 1fr 80px; grid-template-areas:
+    "sidebar"
+    "app"
+    "np";}
+  .sidebar{position:relative; height:auto; border-right:none; border-bottom:1px solid rgba(255,255,255,.06)}
+}
