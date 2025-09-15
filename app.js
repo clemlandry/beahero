@@ -279,7 +279,7 @@ function router(){
     app.innerHTML = `
       <div class="section">
         <h2>Section en cours de construction</h2>
-        <p>Reviens plus tard 😉</p>
+        <p>PAS FINI</p>
         <button class="btn" onclick="linkTo('#/artist')">Aller à l’artiste</button>
       </div>`;
   }
