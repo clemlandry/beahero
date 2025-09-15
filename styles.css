@@ -339,6 +339,62 @@ tr.playing td:first-child::before{
   }
 }
 
+/* ===== NAV MOBILE : la sidebar devient une top bar ===== */
+@media (max-width: 900px){
+  /* Le layout passe en pile : menu en haut, contenu dessous */
+  body{
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+    grid-template-areas:
+      "sidebar"
+      "app";
+  }
+
+  .sidebar{
+    position: sticky;
+    top: 0;
+    height: auto;                 /* plus de 100vh */
+    z-index: 200;                 /* au-dessus du contenu */
+    border-right: none;
+    border-bottom: 1px solid rgba(255,255,255,.06);
+    padding: 10px 12px;
+    background: var(--panel);
+  }
+
+  /* Marque compactée si tu veux gagner de la place */
+  .brand span{ font-size: 14px; }
+  /* (option) cacher le texte de la marque : */
+  /* .brand span{ display:none; } */
+
+  /* La nav devient horizontale et scrollable */
+  .nav{
+    flex-direction: row;
+    gap: 8px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;           /* Firefox */
+    margin-top: 4px;
+  }
+  .nav::-webkit-scrollbar{ display: none; } /* Chrome/Safari */
+
+  .nav a{
+    flex: 0 0 auto;
+    padding: 8px 12px;
+    border-radius: 999px;
+    background: rgba(255,255,255,.06);
+    color: var(--muted);
+    white-space: nowrap;
+  }
+  .nav a:hover{
+    color: var(--text);
+    background: rgba(255,255,255,.10);
+  }
+  .nav a.active{
+    color: var(--text);
+    background: linear-gradient(135deg, rgba(142,229,255,.16), rgba(75,214,168,.16));
+    border: 1px solid rgba(255,255,255,.10);
+  }
+}
 
 
 /* =========================================================
