@@ -280,49 +280,65 @@ tr.playing td:first-child::before{
    MOBILE
 ========================================================= */
 /* ===== Player bar mobile (3 lignes) ===== */
+/* ===== Player bar mobile (3 lignes, sans display:contents) ===== */
 @media (max-width: 640px){
-  :root{ --bar-h: 80px; } /* hauteur de réserve pour le padding du contenu */
+  :root{ --bar-h: 80px; } /* espace réservé pour le contenu au-dessus */
 
-  /* La barre devient une grille en 3 lignes */
   .player-bar{
-    display: grid;
+    display: grid !important;                 /* force le mode grid sur mobile */
     gap: 8px 12px;
     align-items: center;
-    grid-template-columns: 1fr auto;               /* gauche = texte/progress, droite = actions */
-    grid-template-rows: auto auto auto;            /* progress / (title+controls) / (artist+clip) */
+    grid-template-columns: 1fr auto;          /* gauche = infos/progress, droite = actions */
+    grid-template-rows: auto auto auto;       /* progress / (info+controls) / (info+clip) */
     grid-template-areas:
       "progress progress"
-      "title    controls"
-      "artist   clip";
-    height: auto;                                   /* s’adapte au contenu */
+      "info     controls"
+      "info     clip";
+    height: auto;
     padding: 10px 12px calc(10px + env(safe-area-inset-bottom, 0px));
   }
 
-  /* On “déplie” l’enveloppe info pour placer #np-title et #np-artist directement dans la grille */
-  .np-info{ display: contents; }                    /* permet à ses enfants de prendre les zones */
-  .np-meta{ display: contents; }                    /* idem */
+  /* Infos (titre + artiste) empilés à gauche */
+  .np-info{
+    grid-area: info;
+    display: flex;
+    flex-direction: column;       /* Titre puis artiste */
+    min-width: 0;                  /* évite les débordements */
+  }
 
-  /* Zones */
-  .np-progress{ grid-area: progress; display:flex; align-items:center; gap: 8px; }
+  .np-meta{ display: flex; flex-direction: column; gap: 2px; }
   #np-title{
-    grid-area: title;
     font-weight: 700;
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   }
-  .np-controls{ grid-area: controls; justify-self: end; display:flex; gap: 12px; }
   #np-artist{
-    grid-area: artist;
     color: var(--muted);
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   }
-  #btnToggleClip{ grid-area: clip; justify-self: end; }
 
-  /* La barre de progression prend toute la largeur */
+  /* Barre de progression : toute la largeur sur la 1ère ligne */
+  .np-progress{
+    grid-area: progress;
+    display: flex; align-items: center; gap: 8px;
+    min-width: 0;
+  }
   #progress{ width: 100%; }
 
-  /* Réduire un peu les boutons pour le pouce */
+  /* Contrôles au milieu/droite (ligne 2) */
+  .np-controls{
+    grid-area: controls;
+    justify-self: end;
+    display: flex; gap: 12px;
+  }
   .np-controls button{ font-size: 18px; }
+
+  /* Bouton pour le clip (ligne 3, à droite) */
+  #btnToggleClip{
+    grid-area: clip;
+    justify-self: end;
+  }
 }
+
 
 
 /* =========================================================
