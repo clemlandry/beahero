@@ -279,27 +279,51 @@ tr.playing td:first-child::before{
 /* =========================================================
    MOBILE
 ========================================================= */
-@media (max-width: 900px){
-  :root{ --bar-h: 72px; }
+/* ===== Player bar mobile (3 lignes) ===== */
+@media (max-width: 640px){
+  :root{ --bar-h: 80px; } /* hauteur de réserve pour le padding du contenu */
 
-  body{
-    grid-template-columns: 1fr;
-    grid-template-rows: auto 1fr;
+  /* La barre devient une grille en 3 lignes */
+  .player-bar{
+    display: grid;
+    gap: 8px 12px;
+    align-items: center;
+    grid-template-columns: 1fr auto;               /* gauche = texte/progress, droite = actions */
+    grid-template-rows: auto auto auto;            /* progress / (title+controls) / (artist+clip) */
     grid-template-areas:
-      "sidebar"
-      "app";
+      "progress progress"
+      "title    controls"
+      "artist   clip";
+    height: auto;                                   /* s’adapte au contenu */
+    padding: 10px 12px calc(10px + env(safe-area-inset-bottom, 0px));
   }
 
-  .sidebar{
-    position: relative;
-    height: auto;
-    border-right: none;
-    border-bottom: 1px solid rgba(255,255,255,.06);
-  }
+  /* On “déplie” l’enveloppe info pour placer #np-title et #np-artist directement dans la grille */
+  .np-info{ display: contents; }                    /* permet à ses enfants de prendre les zones */
+  .np-meta{ display: contents; }                    /* idem */
 
+  /* Zones */
+  .np-progress{ grid-area: progress; display:flex; align-items:center; gap: 8px; }
+  #np-title{
+    grid-area: title;
+    font-weight: 700;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .np-controls{ grid-area: controls; justify-self: end; display:flex; gap: 12px; }
+  #np-artist{
+    grid-area: artist;
+    color: var(--muted);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  #btnToggleClip{ grid-area: clip; justify-self: end; }
+
+  /* La barre de progression prend toute la largeur */
+  #progress{ width: 100%; }
+
+  /* Réduire un peu les boutons pour le pouce */
   .np-controls button{ font-size: 18px; }
-  .np-info{ flex-basis: 160px; min-width: 120px; }
 }
+
 
 /* =========================================================
    ALBUMS
