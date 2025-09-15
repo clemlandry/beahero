@@ -445,8 +445,8 @@ btnCloseClip?.addEventListener("click", ()=>{
 // Bonus: si on change de piste pendant que la sheet est ouverte, s'assurer que la vidéo est dedans
 function ensureClipPlacementOnPlay(){
   if (clipSheet.classList.contains("open")) {
-    // si la sheet est ouverte, garantir que le player est bien dans la sheet
     if (sheetBody && gPlayer.parentElement !== sheetBody) sheetBody.appendChild(gPlayer);
-    gPlayer.style.display = "block";
+    // pas de display ici : le CSS de la sheet gère l’affichage
   }
 }
+
