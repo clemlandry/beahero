@@ -1,13 +1,41 @@
 // --- Données fictives (à adapter à ton RP) ---
+function toggleClip(trackDiv) {
+  const container = trackDiv.querySelector(".clip-container");
+  const player = document.getElementById("global-player");
+  const dock = document.getElementById("player-dock");
+
+  const opening = (container.style.display === "none" || container.style.display === "");
+  if (opening) {
+    container.style.display = "block";
+    container.appendChild(player);
+    player.style.display = "block"; // visible en grand
+  } else {
+    container.style.display = "none";
+    if (dock) dock.appendChild(player); // on range le lecteur
+    player.style.display = "none"; // on le masque si tu ne veux pas qu'il prenne de place
+  }
+}
+function clearPlayingHighlights(){
+  document.querySelectorAll("tr.playing").forEach(tr => tr.classList.remove("playing"));
+}
+function highlightPlayingById(id){
+  clearPlayingHighlights();
+  document.querySelectorAll(`tr[data-id="${CSS.escape(id)}"]`)
+    .forEach(tr => tr.classList.add("playing"));
+}
+
 
 function formatNumberShort(n) {
-  if (n >= 1_000_000) {
+  if (n >= 1_000_000_000) {
+    return (n / 1_000_000_000).toFixed(1).replace('.', ',') + " Mrd";
+  } else if (n >= 1_000_000) {
     return (n / 1_000_000).toFixed(1).replace('.', ',') + " M";
   } else if (n >= 1_000) {
     return (n / 1_000).toFixed(1).replace('.', ',') + " k";
   }
   return n.toString();
 }
+
 
 // en haut de app.js
 let QUEUE = [];      // [{title, artist, file}]
@@ -17,11 +45,11 @@ function playFromQueue(index){
   if(index < 0 || index >= QUEUE.length) return;
   Q_INDEX = index;
   const t = QUEUE[Q_INDEX];
-  setNowPlaying(t.title, t.artist, t.file);
-  // maj du bouton ▶️/⏸
+  setNowPlaying(t.title, t.artist, t.file, t.cover, t.id);
   const btn = document.getElementById("btnPlayPause");
   if(btn) btn.textContent = "⏸";
 }
+
 
 // brancher les boutons (en bas de app.js)
 document.getElementById("btnNext").addEventListener("click", ()=>{
@@ -32,20 +60,22 @@ document.getElementById("btnPrev").addEventListener("click", ()=>{
 });
 
 // auto enchaînement
-document.getElementById("player").addEventListener("ended", ()=>{
+document.getElementById("global-player").addEventListener("ended", ()=>{
   if(QUEUE.length) playFromQueue((Q_INDEX+1) % QUEUE.length);
 });
+
 
 const DB = {
   artist: {
     id: "IXEN",
     name: "IXEN",
-    monthlyListeners: 1245678,
+    monthlyListeners: 34545321,
     tags: ["K-pop", "Dance", "Synthpop"],
     popular: [
-      { id:"trk-anpanman", title:"Anpan Man", duration:229, plays:18504567, file:"assets/anpanman.mp3", cover:"assets/blue-horizon.png" },
-     
-    ],
+  { id:"trk-anpanman", title:"Anpan Man", duration:229, plays:1500000000, file:"assets/anpanman.mp4", cover:"assets/blue-horizon.png" },
+  { id:"trk-sunshine", title:"Sunshine", duration:239, plays:18504567, file:"assets/sunshine.mp4", cover:"assets/blue-horizon.png" },
+],
+
     albums: [
       {
         id: "alb-bh",
@@ -54,7 +84,8 @@ const DB = {
         type: "Album",
         cover: "assets/blue-horizon.png",
         tracks: [
-          { no:1, title:"Anpan Man", duration:206, file:"assets/anpanman.mp3" },
+          { id:"trk-anpanman",no:1, title:"Anpan Man", duration:229, file: "assets/anpanman.mp4" },
+          { id:"trk-sunshine",no:2, title:"Sunshine", duration:239, plays:18504567, file:"assets/sunshine.mp4",  },
           
         ]
       },
@@ -76,21 +107,29 @@ function secondsToMMSS(s){
 
 function linkTo(route){ location.hash = route; }
 
-function setNowPlaying(title, artist, file, cover){
-  const titleEl = document.getElementById("np-title");
-  const artistEl = document.getElementById("np-artist");
-  titleEl.textContent = title;
-  artistEl.textContent = artist;
+function setNowPlaying(title, artist, file, cover, id){
+  document.getElementById("np-title").textContent = title;
+  document.getElementById("np-artist").textContent = artist;
 
   const img = document.getElementById("np-cover");
   if (img && cover) img.src = cover;
 
-  const player = document.getElementById("player");
+  const player = document.getElementById("global-player");
+
+  // si 'file' manquant (cas piste album), on le récupère depuis populaires par id
+  if (!file && id){
+    const fromPopular = DB.artist.popular.find(t => t.id === id);
+    if (fromPopular) { file = fromPopular.file; cover = cover || fromPopular.cover; }
+  }
+
   if (file) {
     player.src = file;
-    player.play();
+    player.play().catch(()=>{});
+    ensureClipPlacementOnPlay?.();
   }
+  if (id) highlightPlayingById(id);
 }
+
 
 
 
@@ -100,6 +139,8 @@ function ArtistPage(){
   const latest = [...albums].sort((a,b)=>b.year-a.year)[0];
 
   app.innerHTML = `
+
+  
   
     
       <div class="artist-header">
@@ -147,17 +188,20 @@ function ArtistPage(){
       <h2>Populaires</h2>
       <table class="table">
         <thead><tr><th>#</th><th>Titre</th><th>Lectures</th><th>Durée</th></tr></thead>
-        <tbody>
-          ${popular.map((t,i)=>`
-            <tr data-play="${t.title}">
-              <td>${i+1}</td>
-              <td>${t.title}</td>
-              <td>${formatNumberShort(t.plays)}</td>
+        
+<tbody>
+  ${popular.map((t,i)=>`
+    <tr data-id="${t.id}" data-play="${t.title}">
+      <td>${i+1}</td>
+      <td>${t.title}</td>
+      <td>${formatNumberShort(t.plays)}</td>
+      <td>${secondsToMMSS(t.duration)}</td>
+    </tr>
+  `).join("")}
+</tbody>
 
-              <td>${secondsToMMSS(t.duration)}</td>
-            </tr>
-          `).join("")}
-        </tbody>
+
+
       </table>
     </div>
 
@@ -178,7 +222,30 @@ function ArtistPage(){
     </div>
   `;
 
- 
+ app.querySelectorAll(".toggle-clip").forEach(btn=>{
+  btn.addEventListener("click", ()=>{
+    const row = btn.closest("tr");
+    const clipRow = row.nextElementSibling; // la ligne clip juste après
+    const container = clipRow.querySelector(".clip-container");
+    const player = document.getElementById("global-player");
+    const dock = document.getElementById("player-dock");
+
+    const opening = (clipRow.style.display === "none" || clipRow.style.display === "");
+    if (opening) {
+      clipRow.style.display = "";
+      container.style.display = "block";
+      container.appendChild(player);
+      player.style.display = "block";
+      btn.textContent = "⬇️";
+    } else {
+      clipRow.style.display = "none";
+      container.style.display = "none";
+      dock.appendChild(player);
+      player.style.display = "none";
+      btn.textContent = "⬆️";
+    }
+  });
+});
 
 
   // Interactions
@@ -189,18 +256,20 @@ function ArtistPage(){
 });
 
  
- app.querySelectorAll("tr[data-play]").forEach(row=>{
-  row.addEventListener("click", ()=>{
-    const title = row.getAttribute("data-play");
-    // dans ArtistPage(), au clic d’une ligne populaire :
-const track = popular.find(t => t.title === title);
-if(track){
-  QUEUE = popular.map(t => ({ title:t.title, artist:DB.artist.name, file:t.file })); // file = populaires
-  playFromQueue(popular.indexOf(track));
-}
+app.querySelectorAll('tr[data-id]').forEach(row=>{
+  row.addEventListener('click', ()=>{
+    const id = row.getAttribute('data-id');
+    const track = DB.artist.popular.find(t => t.id === id);
+    if(!track) return;
 
+    QUEUE = DB.artist.popular.map(t => ({
+      id:t.id, title:t.title, artist:DB.artist.name, file:t.file, cover:t.cover
+    }));
+    playFromQueue(Math.max(0, QUEUE.findIndex(t => t.id === id)));
   });
 });
+
+
 
 
 }
@@ -235,32 +304,41 @@ function AlbumPage(id){
       <table class="table">
         <thead><tr><th>#</th><th>Titre</th><th>Durée</th></tr></thead>
         <tbody>
-          ${album.tracks.map(t=>`
-            <tr data-play="${t.title}">
-              <td>${t.no}</td>
-              <td>${t.title}</td>
-              <td>${secondsToMMSS(t.duration)}</td>
-            </tr>
-          `).join("")}
+  ${album.tracks.map(t=>`
+    <tr data-id="${t.id}" data-play="${t.title}">
+      <td>${t.no}</td>
+      <td>${t.title}</td>
+      <td>${secondsToMMSS(t.duration)}</td>
+    </tr>
+  `).join("")}
+</tbody>
 
-          
-        </tbody>
       </table>
     </div>
   `;
 
-  $("#btnPlayAlbum").addEventListener("click", ()=>{
-    setNowPlaying(album.tracks[0].title, DB.artist.name);
+$("#btnPlayAlbum").addEventListener("click", ()=>{
+  QUEUE = album.tracks.map(t => {
+    const fromPopular = DB.artist.popular.find(p => p.id === t.id) || {};
+    return { id:t.id, title:t.title, artist:DB.artist.name,
+             file: t.file || fromPopular.file, cover: fromPopular.cover };
   });
-  app.querySelectorAll("tr[data-play]").forEach(row=>{
-  row.addEventListener("click", ()=>{
-    const title = row.getAttribute("data-play");
-    // essaie de retrouver un file via la liste 'popular'
-    const fromPopular = DB.artist.popular.find(t => t.title === title);
-    const file = fromPopular ? fromPopular.file : undefined;
-    setNowPlaying(title, DB.artist.name, file);
+  playFromQueue(0);
+});
+
+app.querySelectorAll('tr[data-id]').forEach(row=>{
+  row.addEventListener('click', ()=>{
+    const id = row.getAttribute('data-id');
+    QUEUE = album.tracks.map(t => {
+      const fromPopular = DB.artist.popular.find(p => p.id === t.id) || {};
+      return { id:t.id, title:t.title, artist:DB.artist.name,
+               file: t.file || fromPopular.file, cover: fromPopular.cover };
+    });
+    const idx = QUEUE.findIndex(t => t.id === id);
+    playFromQueue(Math.max(0, idx));
   });
 });
+
 
 }
 
@@ -289,37 +367,85 @@ window.addEventListener("DOMContentLoaded", router);
 window.linkTo = linkTo;
 
 
-const player = document.getElementById("player");
+const player = document.getElementById("global-player");
 const btnPlayPause = document.getElementById("btnPlayPause");
 const progress = document.getElementById("progress");
 const npCurrent = document.getElementById("np-current");
 const npDuration = document.getElementById("np-duration");
 
 btnPlayPause.addEventListener("click", ()=>{
-  if (player.paused) {
-    player.play();
-    btnPlayPause.textContent = "⏸";
-  } else {
-    player.pause();
-    btnPlayPause.textContent = "▶️";
-  }
+  if (player.paused) { player.play(); btnPlayPause.textContent = "⏸"; }
+  else { player.pause(); btnPlayPause.textContent = "▶️"; }
 });
 
+
+
 player.addEventListener("loadedmetadata", ()=>{
-  progress.max = player.duration;
-  npDuration.textContent = secondsToMMSS(Math.floor(player.duration));
+  progress.max = player.duration || 0;
+  npDuration.textContent = secondsToMMSS(Math.floor(player.duration || 0));
 });
 
 player.addEventListener("timeupdate", ()=>{
-  progress.value = player.currentTime;
-  npCurrent.textContent = secondsToMMSS(Math.floor(player.currentTime));
+  progress.value = player.currentTime || 0;
+  npCurrent.textContent = secondsToMMSS(Math.floor(player.currentTime || 0));
 });
 
-progress.addEventListener("input", ()=>{
-  player.currentTime = progress.value;
+progress.addEventListener("input", ()=>{ player.currentTime = Number(progress.value); });
+
+player.addEventListener("ended", ()=>{
+  if(QUEUE.length) playFromQueue((Q_INDEX+1) % QUEUE.length);
 });
 
 
 
 
 
+
+// ===== Bottom sheet controls (ouvrir/fermer le clip depuis la barre)
+const clipSheet = document.getElementById("clip-sheet");
+const sheetBody = clipSheet?.querySelector(".sheet-body");
+const btnToggleClip = document.getElementById("btnToggleClip");
+const btnCloseClip = document.getElementById("btnCloseClip");
+const dock = document.getElementById("player-dock");
+const gPlayer = document.getElementById("global-player");
+
+function openClipSheet(){
+  if (!clipSheet || !sheetBody || !gPlayer) return;
+  sheetBody.appendChild(gPlayer);
+  gPlayer.style.display = "block";          // on montre la vidéo
+  clipSheet.classList.add("open");
+  clipSheet.setAttribute("aria-hidden", "false");
+  // ❗️On NE met PAS play ici : on suppose que la lecture est déjà en cours
+}
+function closeClipSheet(){
+  if (!clipSheet || !dock || !gPlayer) return;
+  dock.appendChild(gPlayer);
+  gPlayer.style.display = "none";           // cache la vidéo mais laisse l'audio jouer
+  clipSheet.classList.remove("open");
+  clipSheet.setAttribute("aria-hidden", "true");
+}
+
+btnToggleClip?.addEventListener("click", ()=>{
+  const isOpen = clipSheet.classList.contains("open");
+  if (isOpen) {
+    closeClipSheet();
+    btnToggleClip.textContent = "⬆️";
+  } else {
+    openClipSheet();
+    btnToggleClip.textContent = "⬇️";
+  }
+});
+
+btnCloseClip?.addEventListener("click", ()=>{
+  closeClipSheet();
+  if (btnToggleClip) btnToggleClip.textContent = "⬆️";
+});
+
+// Bonus: si on change de piste pendant que la sheet est ouverte, s'assurer que la vidéo est dedans
+function ensureClipPlacementOnPlay(){
+  if (clipSheet.classList.contains("open")) {
+    // si la sheet est ouverte, garantir que le player est bien dans la sheet
+    if (sheetBody && gPlayer.parentElement !== sheetBody) sheetBody.appendChild(gPlayer);
+    gPlayer.style.display = "block";
+  }
+}

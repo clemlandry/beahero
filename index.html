@@ -21,28 +21,56 @@
 
   <main id="app"><!-- injecté par app.js --></main>
 
-  <!-- 🎵 Une SEULE barre lecteur en bas -->
-  <div class="player-bar">
+
+
+<!-- Dock pour ranger la vidéo quand le volet est fermé -->
+
+
+<!-- ✅ Une SEULE barre lecteur -->
+<!-- ✅ Une SEULE barre lecteur -->
+<div class="player-bar">
   <div class="np-info">
     <div class="np-meta">
       <div id="np-title">Rien en lecture</div>
       <div id="np-artist">—</div>
     </div>
   </div>
+
   <div class="np-controls">
     <button id="btnPrev">⏮</button>
     <button id="btnPlayPause">▶️</button>
     <button id="btnNext">⏭</button>
   </div>
+
   <div class="np-progress">
     <span id="np-current">0:00</span>
     <input type="range" id="progress" value="0" min="0" max="100" />
     <span id="np-duration">0:00</span>
   </div>
 
-  <!-- Audio caché -->
-  <audio id="player"></audio>
+  <!-- ⬆️ La flèche qui ouvre/ferme le clip -->
+  <button id="btnToggleClip" title="Afficher/Masquer le clip">⬆️</button>
 </div>
+
+<!-- Dock pour ranger la vidéo quand le volet est fermé -->
+<div id="player-dock" hidden>
+  <video id="global-player" preload="metadata" style="width:100%; display:none"></video>
+</div>
+
+<!-- 🎬 Bottom sheet pour afficher le clip -->
+<div id="clip-sheet" aria-hidden="true">
+  <div class="sheet-inner">
+    <div class="sheet-header">
+      <span>Clip en cours</span>
+      <button id="btnCloseClip" title="Fermer">✕</button>
+    </div>
+    <div class="sheet-body"><!-- on y déplace #global-player --></div>
+  </div>
+</div>
+
+
+
+  
 
 
   <script src="app.js" type="module"></script>
