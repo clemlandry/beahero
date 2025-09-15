@@ -188,9 +188,7 @@ function ArtistPage(){
   playFromQueue(0); // lance le premier
 });
 
-  $("#btnFollow").addEventListener("click", ()=>{
-    alert("Tu suis maintenant l'artiste (RP) !");
-  });
+ 
  app.querySelectorAll("tr[data-play]").forEach(row=>{
   row.addEventListener("click", ()=>{
     const title = row.getAttribute("data-play");
