@@ -22,12 +22,12 @@ const DB = {
 
     // IXEN
     { id:"trk-anpanman",  title:"Anpan Man",  duration:229, plays:1500000000, file:"assets/anpanman.mp4",  rank:1, albumId:"alb-bh",  artistId:"ar-ixen", cover:"assets/blue-horizon.png" },
-    { id:"trk-sunshine",  title:"Sunshine",   duration:239, plays:18504567,   file:"assets/sunshine.mp4",  rank:2, albumId:"alb-bh",  artistId:"ar-ixen", cover:"assets/blue-horizon.png" },
+    { id:"trk-sunshine",  title:"Sunshine",   duration:239, plays:820000000,   file:"assets/sunshine.mp4",  rank:2, albumId:"alb-bh",  artistId:"ar-ixen", cover:"assets/blue-horizon.png" },
     
 
 
 
-    { id:"trk-babygirl", title:"Baby Girl",  duration:317, plays:9000000,    file:"assets/baby-girl-sun.mp3", rank:1, albumId:null, artistId:"ar-sun" },
+    { id:"trk-babygirl", title:"Baby Girl",  duration:317, plays:234000000,    file:"assets/baby-girl-sun.mp3", rank:1, albumId:null, artistId:"ar-sun" },
 
 
    
