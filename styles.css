@@ -211,6 +211,7 @@ body{
   grid-template-columns: 120px 1fr;
   gap: 18px;
   align-items: center;
+  margin-bottom: 24px; /* espace supplémentaire après l’entête */
 }
 .artist-cover img{
   width:100%; height:100%; object-fit: cover; border-radius: 14px;
@@ -444,6 +445,13 @@ tr.playing td:first-child::before{
 .grid{ grid-template-columns: repeat(auto-fill, minmax(160px,1fr)); }
 @media (max-width: 900px){
   .grid{ grid-template-columns: repeat(auto-fill, minmax(140px,1fr)); }
+}
+/* dans styles.css, optionnel */
+input[type="search"]::placeholder{ color: var(--muted); }
+input[type="search"]{ transition: border-color .15s, box-shadow .15s; }
+input[type="search"]:focus{
+  border-color: rgba(142,229,255,.35);
+  box-shadow: 0 0 0 3px rgba(142,229,255,.12);
 }
 
 .rank-list{ display:flex; flex-direction:column; gap:10px; }

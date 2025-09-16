@@ -18,25 +18,31 @@ function linkTo(route){ location.hash = route; }
 // ============ DB =============
 const DB = {
   musics: [
+
+
+    // IXEN
     { id:"trk-anpanman",  title:"Anpan Man",  duration:229, plays:1500000000, file:"assets/anpanman.mp4",  rank:1, albumId:"alb-bh",  artistId:"ar-ixen", cover:"assets/blue-horizon.png" },
     { id:"trk-sunshine",  title:"Sunshine",   duration:239, plays:18504567,   file:"assets/sunshine.mp4",  rank:2, albumId:"alb-bh",  artistId:"ar-ixen", cover:"assets/blue-horizon.png" },
-    { id:"trk-neon",      title:"Neon Nights",duration:205, plays:2300000,    file:"assets/neon.mp4",      rank:3, albumId:null,      artistId:"ar-ixen", cover:"assets/logo.png" },
-    { id:"trk-starlight", title:"Starlight",  duration:212, plays:9000000,    file:"assets/starlight.mp4", rank:1, albumId:"alb-sky", artistId:"ar-nova", cover:"assets/nova-sky.png" },
-    { id:"trk-comet",     title:"Comet Run",  duration:188, plays:4200000,    file:"assets/comet.mp4",     rank:2, albumId:"alb-sky", artistId:"ar-nova", cover:"assets/nova-sky.png" },
-    { id:"trk-echoes",    title:"Echoes",     duration:200, plays:1100000,    file:"assets/echoes.mp4",    rank:null, albumId:null,   artistId:"ar-nova", cover:"assets/nova.png" },
-    { id:"trk-waves",     title:"Waves",      duration:240, plays:5200000,    file:"assets/waves.mp4",     rank:1, albumId:"alb-deep",artistId:"ar-echo", cover:"assets/echo-deep.png" },
-    { id:"trk-tide",      title:"Tideflow",   duration:222, plays:2000000,    file:"assets/tide.mp4",      rank:2, albumId:"alb-deep",artistId:"ar-echo", cover:"assets/echo-deep.png" },
-    { id:"trk-solo",      title:"Solace",     duration:198, plays:800000,     file:"assets/solace.mp4",    rank:null, albumId:null,   artistId:"ar-echo", cover:"assets/echo.png" },
+    
+
+
+
+    { id:"trk-babygirl", title:"Baby Girl",  duration:317, plays:9000000,    file:"assets/baby-girl-sun.mp3", rank:1, albumId:null, artistId:"ar-sun" },
+
+
+   
+
+
+    
   ],
   albums: [
     { id:"alb-bh",  title:"Blue Horizon", year:2025, cover:"assets/blue-horizon.png", artistId:"ar-ixen", tracks:["trk-anpanman","trk-sunshine"] },
-    { id:"alb-sky", title:"Skybound",     year:2024, cover:"assets/nova-sky.png",     artistId:"ar-nova", tracks:["trk-starlight","trk-comet"] },
-    { id:"alb-deep",title:"Deepwater",    year:2023, cover:"assets/echo-deep.png",    artistId:"ar-echo", tracks:["trk-waves","trk-tide"] },
+   
   ],
   artists: [
     { id:"ar-ixen", name:"IXEN",  monthlyListeners:34545321, tags:["K-pop","Dance","Synthpop"], image:"assets/logo.png" },
-    { id:"ar-nova", name:"Nova",  monthlyListeners:12345678, tags:["Electropop","Indie"],       image:"assets/nova.png" },
-    { id:"ar-echo", name:"Echo",  monthlyListeners: 5012345, tags:["R&B","Alt"],                image:"assets/echo.png" },
+    { id:"ar-sun", name:"Sun",  monthlyListeners:12345678, tags:["English","Rap"],       image:"assets/sun.jpg" },
+    
   ]
 };
 
@@ -276,18 +282,161 @@ function AlbumPage(id){
     });
   });
 }
+function renderSearchShell(initialQuery=""){
+  app.innerHTML = `
+    <div class="section">
+      <h2>Recherche</h2>
+      <div style="display:flex; gap:10px; align-items:center;">
+        <input id="search-input" type="search" placeholder="Artistes, morceaux, albums..."
+               value="${(initialQuery||"").replace(/"/g,'&quot;')}"
+               style="flex:1; background:var(--card); color:var(--text); border:1px solid rgba(255,255,255,.12); border-radius:12px; padding:10px 12px; outline:none;">
+        <button class="btn" id="search-clear" ${initialQuery?"":"disabled"}>Effacer</button>
+      </div>
+    </div>
+    <div id="search-results"></div>
+  `;
+
+  const $input = $("#search-input");
+  const $clear = $("#search-clear");
+
+  const updateHash = (val)=>{
+    const q = encodeURIComponent(val);
+    const newHash = `#/search${q ? `?q=${q}` : ""}`;
+    if (location.hash !== newHash) history.replaceState(null, "", newHash);
+  };
+
+  const doSearch = (val)=>{
+    updateHash(val);
+    renderSearchResults(val);
+    $clear.disabled = !val;
+  };
+
+  $input?.addEventListener("input", debounce(e => { doSearch(e.target.value || ""); }, 150, "search-input"));
+  $input?.addEventListener("keydown", (e)=>{ if (e.key === "Enter") { e.preventDefault(); doSearch(e.target.value || ""); }});
+  $clear?.addEventListener("click", ()=>{ $input.value = ""; doSearch(""); $input.focus(); });
+}
+
+function renderSearchResults(query=""){
+  const wrap = $("#search-results");
+  if (!wrap) return;
+  const { artists, tracks, albums } = searchAll(query);
+
+  const artistsHTML = artists.length ? `
+    <div class="section">
+      <h2>Artistes</h2>
+      <div class="grid">
+        ${artists.map(ar => `
+          <div class="card" onclick="linkTo('#/artist/${ar.id}')">
+            <div class="cover">
+              <img src="${ar.image}" alt="${ar.name}" style="width:100%;height:100%;object-fit:cover;border-radius:10px;">
+            </div>
+            <div class="title">${ar.name}</div>
+            <div class="meta">${formatNumberShort(ar.monthlyListeners)} mensuels</div>
+          </div>
+        `).join("")}
+      </div>
+    </div>` : `<div class="section"><h2>Artistes</h2><p style="color:var(--muted)">Aucun artiste</p></div>`;
+
+  const tracksHTML = `
+    <div class="section">
+      <h2>Morceaux</h2>
+      ${
+        (tracks.length ? `
+        <table class="table">
+          <thead><tr><th>#</th><th>Titre</th><th>Artiste</th><th>Album</th><th>Lectures</th><th>Durée</th></tr></thead>
+          <tbody>
+            ${tracks.map((t,i)=>{
+              const ar = AR[t.artistId];
+              const al = A[t.albumId];
+              const artistCell = ar
+                ? `<a href="#/artist/${ar.id}" onclick="event.stopPropagation()">${ar.name}</a>`
+                : "—";
+              const albumCell = al
+                ? `<a href="#/album/${al.id}" onclick="event.stopPropagation()">${al.title}</a>`
+                : "—";
+              return `
+                <tr data-id="${t.id}" data-play="${t.title}">
+                  <td>${i+1}</td>
+                  <td>${t.title}</td>
+                  <td>${artistCell}</td>
+                  <td>${albumCell}</td>
+                  <td>${formatNumberShort(t.plays)}</td>
+                  <td>${secondsToMMSS(t.duration)}</td>
+                </tr>
+              `;
+            }).join("")}
+          </tbody>
+        </table>` : `<p style="color:var(--muted)">Aucun morceau</p>` )
+      }
+    </div>`;
+
+  const albumsHTML = albums.length ? `
+    <div class="section">
+      <h2>Albums</h2>
+      <div class="grid">
+        ${albums.map(al => {
+          const ar = AR[al.artistId];
+          return `
+            <div class="album-card" onclick="linkTo('#/album/${al.id}')">
+              <div class="cover"><img src="${al.cover}" alt="Pochette ${al.title}"></div>
+              <h3>${al.title}</h3>
+              <p>${al.year} • ${ar?.name||""}</p>
+            </div>
+          `;
+        }).join("")}
+      </div>
+    </div>` : `<div class="section"><h2>Albums</h2><p style="color:var(--muted)">Aucun album</p></div>`;
+
+  wrap.innerHTML = artistsHTML + tracksHTML + albumsHTML;
+
+  // play on row click (ne réattacher que sur la table actuelle)
+  wrap.querySelectorAll('tr[data-id]')?.forEach(row=>{
+    row.addEventListener('click', ()=>{
+      const id = row.getAttribute('data-id');
+      const list = tracks;
+      QUEUE = list.map(t => t.id);
+      const idx = Math.max(0, QUEUE.findIndex(x => x === id));
+      playFromQueue(idx);
+    });
+  });
+}
+
+function SearchPage(query = ""){
+  if (!$("#search-input")) {
+    renderSearchShell(query);
+  } else {
+    // si on vient d’un lien (ex: nav), sync la valeur et garde le focus
+    const $input = $("#search-input");
+    $input.value = query || "";
+  }
+  renderSearchResults(query);
+  // garder le focus dans l’input
+  const $input = $("#search-input");
+  if ($input) {
+    const pos = $input.value.length;
+    $input.focus();
+    try { $input.setSelectionRange(pos, pos); } catch {}
+  }
+}
+
+
 
 // ============ Router ============
 function router(){
-  const hash = location.hash || "#/home";
-  const parts = hash.split("/");
-  const route = parts[1] || "home";
-  const id    = parts[2];
+  const raw = location.hash || "#/home";
+  // raw ex: "#/search?q=ixen"
+  const noHash = raw.startsWith("#") ? raw.slice(1) : raw; // "/search?q=ixen"
+  const [path, qs=""] = noHash.split("?");
+  const parts = path.split("/").filter(Boolean); // ["search"]
+  const route = parts[0] || "home";
+  const id    = parts[1];
+  const params = new URLSearchParams(qs);
 
   if (route === "home") { HomePage(); }
   else if (route === "artist" && id) { ArtistPage(id); }
   else if (route === "artist") { ArtistPage(DB.artists[0].id); }
   else if (route === "album" && id) { AlbumPage(id); }
+  else if (route === "search") { SearchPage(params.get("q") || ""); }
   else {
     app.innerHTML = `
       <div class="section">
@@ -297,12 +446,14 @@ function router(){
       </div>`;
   }
 
+  // nav active
   document.querySelectorAll(".nav a").forEach(a=>{
     const href = a.getAttribute("href") || "";
     const cur  = `#/${route}`;
     a.classList.toggle("active", href.startsWith(cur));
   });
 }
+
 
 // ============ Boot ============
 function safeStart(){ try { router(); } catch(e){ console.error(e); app.innerHTML = `<pre>${e.stack||e}</pre>`; } }
@@ -373,3 +524,79 @@ window.linkTo = linkTo;
 window.playFromQueue = playFromQueue;
 window.setNowPlayingByTrackId = setNowPlayingByTrackId;
 window.ensureClipPlacementOnPlay = ensureClipPlacementOnPlay;
+
+// ---------- Helpers recherche ----------
+const debounces = {};
+function debounce(fn, delay = 200, key = "default"){
+  return (...args) => {
+    clearTimeout(debounces[key]);
+    debounces[key] = setTimeout(() => fn(...args), delay);
+  };
+}
+function norm(s){
+  return (s||"")
+    .toString()
+    .normalize("NFD").replace(/\p{Diacritic}/gu,"") // retire accents
+    .toLowerCase().trim();
+}
+// score simple: présence + priorité début de mot + exact id
+function scoreText(text, q){
+  text = norm(text); q = norm(q);
+  if (!q || !text) return 0;
+  if (text === q) return 1000;
+  const i = text.indexOf(q);
+  if (i === 0) return 500;     // commence par
+  if (i > 0)  return 200;      // contient
+  return 0;
+}
+function searchAll(q){
+  const qq = norm(q);
+  if (!qq) return {
+    artists: [...DB.artists].sort((a,b)=> b.monthlyListeners - a.monthlyListeners).slice(0,8),
+    tracks:  [...DB.musics].filter(t=> Number.isInteger(t.rank)).sort((a,b)=> a.rank - b.rank).slice(0,8),
+    albums:  [...DB.albums].sort((a,b)=> b.year - a.year).slice(0,8)
+  };
+
+  const artists = DB.artists
+    .map(a => ({ a, s: Math.max(
+      scoreText(a.name, qq),
+      scoreText((a.tags||[]).join(" "), qq)
+    )}))
+    .filter(x => x.s>0)
+    .sort((x,y)=> y.s - x.s || (y.a.monthlyListeners - x.a.monthlyListeners))
+    .map(x=>x.a)
+    .slice(0,12);
+
+  const tracks = DB.musics
+    .map(t => {
+      const ar = AR[t.artistId];
+      const al = A[t.albumId];
+      const s = Math.max(
+        scoreText(t.title, qq),
+        scoreText(ar?.name||"", qq),
+        scoreText(al?.title||"", qq)
+      );
+      return { t, s };
+    })
+    .filter(x => x.s>0)
+    .sort((x,y)=> y.s - x.s || (y.t.plays - x.t.plays))
+    .map(x=>x.t)
+    .slice(0,20);
+
+  const albums = DB.albums
+    .map(al => {
+      const ar = AR[al.artistId];
+      const s = Math.max(
+        scoreText(al.title, qq),
+        scoreText(ar?.name||"", qq)
+      );
+      return { al, s };
+    })
+    .filter(x => x.s>0)
+    .sort((x,y)=> y.s - x.s || (y.al.year - x.al.year))
+    .map(x=>x.al)
+    .slice(0,12);
+
+  return { artists, tracks, albums };
+}
+
