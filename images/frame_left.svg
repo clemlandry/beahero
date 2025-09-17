@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="544.625" height="640" viewBox="0 0 544.625 640">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #ff211e;
+        fill-rule: evenodd;
+      }
+    </style>
+  </defs>
+  <path id="trailer_frame_left.svg" class="cls-1" d="M545.609,640.01L69.521,1280H47.063L440.245,751.459H393.689L316.594,855.1,294.859,751.459H101.282l65.5,305.021L1,1279.34V640ZM214.788,1280H116.077l76.6-102.97Z" transform="translate(-1 -640)"/>
+</svg>
