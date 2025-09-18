@@ -788,7 +788,7 @@ body:not(.w) .p-firstv__themeLists li:not(:nth-child(1)) a:before{
   aspect-ratio: 181 / 80;      /* garde les proportions */
   position: absolute;
   top: clamp(32px, 6vw,0px);
-  left: 0; right: 0; margin: auto; z-index: 100;
+  left: 0; right: 0; margin: auto; z-index: 100; transform: translateX(320px); /* décale de 10px vers la droite */
 }
 .header-logo a { position: absolute; inset: 0; display: block; }
 /* Si tu affiches l’image en background : */
