@@ -4,12 +4,17 @@ import jwt from "jsonwebtoken";
 export default async (req, res) => {
   const { DISCORD_CLIENT_ID, DISCORD_REDIRECT_URI, SESSION_SECRET } = process.env;
 
+  if (!DISCORD_CLIENT_ID || !DISCORD_REDIRECT_URI || !SESSION_SECRET) {
+    res.statusCode = 500;
+    res.end("Missing environment variables");
+    return;
+  }
+
   const stateRaw = crypto.randomBytes(16).toString("hex");
   const state = jwt.sign({ s: stateRaw, t: Date.now() }, SESSION_SECRET, {
     expiresIn: "10m",
   });
 
-  // Cookie state pour CSRF
   res.setHeader("Set-Cookie", [
     `oauth_state=${state}; HttpOnly; Path=/; SameSite=Lax; Max-Age=600`,
   ]);
