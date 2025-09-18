@@ -69,7 +69,18 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 					<h2 class="p-character__title"><span class="hd">PERSONNAGES</span></h2>
 					<div class="p-characterWrap">
 
-                        <a href="/api/auth/discord.js" class="btn-discord">Se connecter avec Discord</a>
+                       <div id="auth" class="auth">
+  <!-- Bouton connexion -->
+  <a id="auth-login" href="/api/auth/discord" class="btn-discord">Se connecter avec Discord</a>
+
+  <!-- Bloc affiché si connecté -->
+  <div id="auth-user" class="auth-user" hidden>
+    <img id="auth-avatar" alt="Avatar" />
+    <span id="auth-name"></span>
+    <a id="auth-logout" href="/api/logout" class="auth-logout">Se déconnecter</a>
+  </div>
+</div>
+
 
 						
 
