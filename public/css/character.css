@@ -15,10 +15,10 @@
 * character
 -------------------------------------------------*/
 .p-character {
-	position: relative;
-	z-index: 3;
-	padding: min(calc(160 / var(--vw-min) * 100vw), 160px) 0;
-	overflow: hidden;
+  position: relative;
+  z-index: 3;
+  padding: min(calc(160 / var(--vw-min) * 100vw), 160px) 0;
+  overflow: hidden;
 }
 @media screen and (max-width:768px){
 	.p-character {
@@ -32,6 +32,8 @@
     -webkit-mask: url(../images/t-character.svg) no-repeat left top / contain;
     mask: url(../images/t-character.svg) no-repeat left top / contain;
     background: #FFF;
+	-webkit-mask-position: 30px 0; /* Safari/iOS */
+  	mask-position: 30px 0;
 }
 @media screen and (max-width:768px){
 	.p-character__title {
@@ -1477,23 +1479,7 @@ body.--noBtn .p-charaChangeBtnWrap {
 	.p-character__item:nth-child(6) {
 		margin-left: calc(max(-70px, -5.83333vw));
 	}
-	.p-character__item:nth-child(10) {
-		display: none;
-	}
-	.p-character__item:nth-child(12) {
-		position: absolute;
-		bottom: 0;
-		right: calc(max(-98px, -8.16666vw));
-	}
-	.p-character__item:nth-child(12):before {
-		content: none;
-	}
-	.p-character__item:nth-child(12) .p-character__numWrap {
-		left: calc(max(-64px, -5.33333vw));
-	}
-	.p-character__item:nth-child(11):before {
-		left: min(calc(176 / var(--vw-min) * 100vw), 176px);
-	}
+	
 }
 @media screen and (max-width:768px){
 	.p-character__item:nth-child(12) .p-character__numWrap {

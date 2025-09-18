@@ -8,9 +8,9 @@ body,div,dl,dt,dd,ul,ol,li,p,h1,h2,h3,h4,h5,h6,th,td,pre,code,blockquote,form,fi
 =============================================== */
 :root{
 	/* color */
-	--color-red01: #FB72C7;
-	--color-red02: #93D3FB;
-	--color-red03: #93D3FB;
+	--color-red01: #93D3FB;
+	--color-red02: #FB72C7;
+	--color-red03: #FB72C7;
 
 	/* chara color */
 	--chara-color-x: #eaf4fc;
@@ -195,7 +195,7 @@ a:hover{
 	background:#f4f4f4;
 }
 .w .p-subin{
-	background:#f4f4f4;
+	background:#9c6b98;
 }
 .w .p-onair__title,
 .w .p-trailer__title,
