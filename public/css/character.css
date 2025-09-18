@@ -1482,16 +1482,10 @@ body.--noBtn .p-charaChangeBtnWrap {
 	
 }
 @media screen and (max-width:768px){
-	.p-character__item:nth-child(12) .p-character__numWrap {
-		left: calc(-64 / var(--vw-min) * 100vw);
-	}
-    .p-character__item:nth-child(10) > a {
-		display: none;
-	}
+	
+   
 }
-.p-character__item:nth-child(11) .p-character__numWrap {
-	display: none;
-}
+
 /*
 html[lang="en"] .otherCharaWrap{
 	display: none;
