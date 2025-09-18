@@ -1570,3 +1570,12 @@ html[lang="en"] .otherCharaWrap{
 		height: auto;
 	}
 }
+
+@media (max-width:768px){
+  .header-logo{
+    transform: none;          /* stoppe le décalage */
+    left: 0; right: 0;        /* centre via margin:auto */
+    margin: auto;
+    top: clamp(0px, 6vw, 32px); /* marge haute raisonnable */
+  }
+}
