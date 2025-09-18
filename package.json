@@ -1,5 +1,10 @@
 {
+  "name": "beahero",
+  "version": "1.0.0",
+  "type": "module",
   "dependencies": {
+    "jsonwebtoken": "^9.0.2",
     "dotenv": "^17.2.2"
   }
 }
+
