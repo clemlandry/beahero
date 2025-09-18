@@ -714,6 +714,7 @@ body:not(.w) .p-firstv__themeLists li:not(:nth-child(1)) a:before{
 		background-color: #fff;
 	}
 	.headerNavLists__item .is-character {
+		margin-left: 20px; /* espace externe */
 		width: min(calc(217 / var(--vw-min) * 100vw), 217px);
 		-webkit-mask: url(../images/t-character.svg)no-repeat center/contain;
 		mask: url(../images/t-character.svg)no-repeat center/contain;

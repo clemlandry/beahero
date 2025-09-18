@@ -27,6 +27,7 @@
 	}
 }
 .p-character__title {
+	margin-left: 2000px; /* espace externe */
     width: 100%;
     height: min(calc(80 / var(--vw-min)* 100vw), 80px);
     -webkit-mask: url(../images/t-character.svg) no-repeat left top / contain;
