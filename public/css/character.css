@@ -1101,11 +1101,16 @@ body.en .p-characterDetail__heroName {
 }
 
 
-.p-characterDetail__cont-img img[src$="chara1.png"]{
-  
-  max-width: 800px;
+.p-characterDetail__cont-img img[src$="chara1.png"],
+.p-characterDetail__cont-img img[src$="chara2.png"] {
+  width: auto;
+  height: auto;
+  max-width: 800px;   /* limite horizontale */
+  max-height: 800px;  /* limite verticale */
   margin: 0;
+  object-fit: contain; /* sécurité si jamais un conteneur impose une taille */
 }
+
 @media (max-width:768px){
   .p-characterDetail__cont-img { 
     width: min(calc(690 / var(--vw-min) * 100vw), 100vw);
@@ -1114,6 +1119,14 @@ body.en .p-characterDetail__heroName {
 
   /* override spécifique chara1 */
   .p-characterDetail__cont-img img[src$="chara1.png"]{
+    width: 100% !important;     /* annule le 250% */
+    max-width: 100% !important;
+    margin-left: 0 !important;  /* annule le -75% */
+    margin-top: 0 !important;
+    height: auto;
+    object-fit: contain;        /* au cas où une hauteur serait fixée plus tard */
+  }
+  .p-characterDetail__cont-img img[src$="chara2.png"]{
     width: 100% !important;     /* annule le 250% */
     max-width: 100% !important;
     margin-left: 0 !important;  /* annule le -75% */
