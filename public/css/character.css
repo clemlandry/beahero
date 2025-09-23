@@ -875,16 +875,16 @@ body.en .p-characterDetail__heroName {
 		margin-top: min(calc(-16 / var(--vw-min)* 100vw), -16px);
 	}
 }
-@media screen and (max-width:768px){
-	.p-characterDetail__cont-img {
-		position: relative;
-		width: calc(690 / var(--vw-min) * 100vw);
-	}
-	.p-characterDetail__cont-img img{
-		width: 250%;
-		margin-left: -75%;
-		max-width: unset;
-	}
+@media (max-width:768px){
+  .p-characterDetail__cont-img { /* largeur potentiellement > 100vw */
+    position: relative;
+    width: calc(690 / var(--vw-min) * 100vw);
+  }
+  .p-characterDetail__cont-img img{
+    width: 250%;          /* ⬅️ énorme */
+    margin-left: -75%;    /* ⬅️ décale hors écran */
+    max-width: unset;
+  }
 }
 /* catch color */
 .is-chara01 .p-characterDetail__cont-catch {
