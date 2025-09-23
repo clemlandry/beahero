@@ -836,12 +836,13 @@ body.en .p-characterDetail__heroName {
 	left: 0;
 	bottom: 0;
 	margin: auto;
+	
 }
 .is-chara07 .p-characterDetail__cont-img {
 	width: min(calc(900 / var(--vw-min) * 100vw), 900px);
 }
 .p-characterDetail__cont-img img {
-	width: 100%;
+	width: 50%;
 	pointer-events: none;
 }
 @media screen and (min-width: 769px){
@@ -1078,6 +1079,11 @@ body.en .p-characterDetail__heroName {
 }
 
 
+.p-characterDetail__cont-img img[src$="chara1.png"]{
+  
+  max-width: 800px;
+  margin: 0;
+}
 
 
 /** 
