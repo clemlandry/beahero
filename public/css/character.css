@@ -1103,8 +1103,12 @@ body.en .p-characterDetail__heroName {
 
 .p-characterDetail__cont-img img[src$="chara1.png"],
 .p-characterDetail__cont-img img[src$="chara3.png"],
+.p-characterDetail__cont-img img[src$="chara6.png"],
 .p-characterDetail__cont-img img[src$="chara4.png"],
 .p-characterDetail__cont-img img[src$="chara5.png"],
+.p-characterDetail__cont-img img[src$="chara8.png"],
+.p-characterDetail__cont-img img[src$="chara8.1.png"],
+   .p-characterDetail__cont-img img[src$="chara7.png"],
 .p-characterDetail__cont-img img[src$="chara2.png"] {
   width: auto;
   height: auto;
@@ -1124,6 +1128,10 @@ body.en .p-characterDetail__heroName {
   .p-characterDetail__cont-img img[src$="chara3.png"],
   .p-characterDetail__cont-img img[src$="chara4.png"],
   .p-characterDetail__cont-img img[src$="chara5.png"],
+  .p-characterDetail__cont-img img[src$="chara6.png"],
+   .p-characterDetail__cont-img img[src$="chara7.png"],
+   .p-characterDetail__cont-img img[src$="chara8.png"],
+   .p-characterDetail__cont-img img[src$="chara8.1.png"],
   .p-characterDetail__cont-img img[src$="chara1.png"]{
     width: 100% !important;     /* annule le 250% */
     max-width: 100% !important;
