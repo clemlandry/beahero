@@ -704,77 +704,99 @@ body.en .p-characterDetail__heroName {
 		padding: 0;
 	}
 }
-/** movie **/
-.p-characterDetail__cont-movieWrap {
-	padding: min(calc(18 / var(--vw-min) * 100vw), 18px) min(calc(40 / var(--vw-min) * 100vw),40px) 0 0;
+/* --- Conteneur GIF (générique) --- */
+.p-characterDetail__cont-movie {
+  overflow: hidden;
+  position: relative;
+  padding: 0;
+  height: auto;
 }
-@media screen and (max-width:768px){
-	.p-characterDetail__cont-movieWrap {
-		width: 100%;
-		padding: calc(20 / var(--vw-min) * 100vw) 0 0;
-	}
+.character-gif {
+  display: block;
+  max-width: 100%;
+  height: auto;
 }
+
+/* --- Titre --- */
 .p-character__movieTitle {
-	font-size: min(calc(11 / var(--vw-min) * 100vw), 11px);
-	color: #fff;
-	margin-bottom: min(calc(20 / var(--vw-min) * 100vw), 20px);
+  font-size: min(calc(11 / var(--vw-min) * 100vw), 11px);
+  color: #fff;
+  margin-bottom: min(calc(20 / var(--vw-min) * 100vw), 20px);
 }
-@media screen and (max-width:768px){
-	.p-character__movieTitle {
-		font-size: calc(16 / var(--vw-min) * 100vw);
-		margin-bottom: calc(15 / var(--vw-min) * 100vw);
-	}
+@media (max-width:768px){
+  .p-character__movieTitle {
+    font-size: calc(16 / var(--vw-min) * 100vw);
+    margin-bottom: calc(15 / var(--vw-min) * 100vw);
+  }
 }
 .p-character__movieTitle span {
-	padding: min(calc(2 / var(--vw-min) * 100vw), 2px) min(calc(4 / var(--vw-min) * 100vw), 4px);
-	background-color: #000;
+  padding: min(calc(2 / var(--vw-min) * 100vw), 2px) min(calc(4 / var(--vw-min) * 100vw), 4px);
+  background-color: #000;
 }
-@media screen and (max-width:768px){
-	.p-character__movieTitle span {
-		padding: calc(2 / var(--vw-min) * 100vw) calc(4 / var(--vw-min) * 100vw);
-	}
+@media (max-width:768px){
+  .p-character__movieTitle span {
+    padding: calc(2 / var(--vw-min) * 100vw) calc(4 / var(--vw-min) * 100vw);
+  }
 }
-.p-characterDetail__movieLists {
-	display: flex;
+
+/* --- Liste (base) --- */
+.p-characterDetail__movieLists { gap: 20px; }
+
+/* --- Items (base) --- */
+.p-characterDetail__movieItem { box-sizing: border-box; }
+
+/* ========= Layout 1 : côte à côte ========= */
+.p-characterDetail__movieLists.layout-side {
+  display: flex;
+  flex-wrap: wrap;
 }
-@media screen and (max-width:768px){
-	.p-characterDetail__movieLists {
-		display: block;
-	}
+.p-characterDetail__movieLists.layout-side .p-characterDetail__movieItem {
+  width: calc(50% - 10px);
 }
-.p-characterDetail__movieItem {
-	width: calc((100% - min(calc(20 / var(--vw-min) * 100vw),20px)) / 2);
+@media (max-width:768px){
+  .p-characterDetail__movieLists.layout-side {
+    display: block;
+  }
+  .p-characterDetail__movieLists.layout-side .p-characterDetail__movieItem {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+  .p-characterDetail__movieLists.layout-side .p-characterDetail__movieItem:last-child {
+    margin-bottom: 0;
+  }
 }
-@media screen and (min-width:769px){
-	.p-characterDetail__movieItem:nth-child(2n) {
-		margin-left: min(calc(20 / var(--vw-min) * 100vw),20px);
-	}
+
+/* ========= Layout 2 : stack ========= */
+.p-characterDetail__movieLists.layout-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
-@media screen and (max-width:768px){
-	.p-characterDetail__movieItem {
-		width: 100%;
-		padding: calc(20 / var(--vw-min) * 100vw) 0 0;
-	}
+.p-characterDetail__movieLists.layout-stack .p-characterDetail__movieItem {
+  width: 100%;
+  padding: 0;
 }
-.p-characterDetail__cont-movie {
-	overflow: hidden;
-    position: relative;
-    padding-top: 56.25%;	
+
+/* -- Variante plein cadre (étirer à 100%) -- */
+.p-characterDetail__movieLists.layout-stack.stack--full .p-characterDetail__cont-movie { width: 100%; }
+.p-characterDetail__movieLists.layout-stack.stack--full .character-gif {
+  display: block;
+  width: 100%;
+  height: auto;
 }
-.p-characterDetail__cont-movie a {
-	width: 100%;
-	height: 100%;
-	display: block;
-	position: absolute;
-	top: 0%;
-	right: 0;
-	bottom: 0;
-	left: 0%;
-	margin: auto;
-	background-color: #000;
-	background-size: cover;
-	transition: all 0.3s ease;
+
+/* -- Variante fit (ne pas étirer, centrer) -- */
+.p-characterDetail__movieLists.layout-stack.stack--fit .p-characterDetail__cont-movie {
+  text-align: center;
 }
+.p-characterDetail__movieLists.layout-stack.stack--fit .character-gif {
+  display: inline-block;   /* conserve la taille intrinsèque */
+  max-width: 100%;
+  height: auto;
+}
+
+
+
 /*-----------------------------------------------
 * sp-playMovie
 -------------------------------------------------*/
