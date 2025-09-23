@@ -1106,6 +1106,23 @@ body.en .p-characterDetail__heroName {
   max-width: 800px;
   margin: 0;
 }
+@media (max-width:768px){
+  .p-characterDetail__cont-img { 
+    width: min(calc(690 / var(--vw-min) * 100vw), 100vw);
+    overflow: hidden;           /* évite tout débordement résiduel */
+  }
+
+  /* override spécifique chara1 */
+  .p-characterDetail__cont-img img[src$="chara1.png"]{
+    width: 100% !important;     /* annule le 250% */
+    max-width: 100% !important;
+    margin-left: 0 !important;  /* annule le -75% */
+    margin-top: 0 !important;
+    height: auto;
+    object-fit: contain;        /* au cas où une hauteur serait fixée plus tard */
+  }
+}
+
 
 
 /** 
