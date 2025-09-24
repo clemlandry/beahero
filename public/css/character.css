@@ -1102,6 +1102,7 @@ body.en .p-characterDetail__heroName {
 
 
 .p-characterDetail__cont-img img[src$="chara1.png"],
+.p-characterDetail__cont-img img[src$="chara10.png"],
 .p-characterDetail__cont-img img[src$="chara3.png"],
 .p-characterDetail__cont-img img[src$="chara6.png"],
 .p-characterDetail__cont-img img[src$="chara4.png"],
@@ -1109,6 +1110,7 @@ body.en .p-characterDetail__heroName {
 .p-characterDetail__cont-img img[src$="chara8.png"],
 .p-characterDetail__cont-img img[src$="chara8.1.png"],
    .p-characterDetail__cont-img img[src$="chara7.png"],
+    .p-characterDetail__cont-img img[src$="chara9.png"],
 .p-characterDetail__cont-img img[src$="chara2.png"] {
   width: auto;
   height: auto;
@@ -1126,11 +1128,13 @@ body.en .p-characterDetail__heroName {
 
   /* override spécifique chara1 */
   .p-characterDetail__cont-img img[src$="chara3.png"],
+  .p-characterDetail__cont-img img[src$="chara10.png"],
   .p-characterDetail__cont-img img[src$="chara4.png"],
   .p-characterDetail__cont-img img[src$="chara5.png"],
   .p-characterDetail__cont-img img[src$="chara6.png"],
    .p-characterDetail__cont-img img[src$="chara7.png"],
    .p-characterDetail__cont-img img[src$="chara8.png"],
+     .p-characterDetail__cont-img img[src$="chara9.png"],
    .p-characterDetail__cont-img img[src$="chara8.1.png"],
   .p-characterDetail__cont-img img[src$="chara1.png"]{
     width: 100% !important;     /* annule le 250% */
