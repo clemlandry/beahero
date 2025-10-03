@@ -18,10 +18,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // --- Auth Discord (nouveau) ---
   initAuthUI();
-
-  // (Optionnel) protéger des pages : si <body data-require-auth="true">
   protectIfRequired();
+
+  // --- Bloquer clic droit et touches ---
+  document.addEventListener('contextmenu', e => e.preventDefault()); // clic droit
+  document.addEventListener('keydown', e => {
+    if (
+      e.key === "F12" || // F12
+      (e.ctrlKey && e.shiftKey && e.key === "I") || // Ctrl+Shift+I
+      (e.ctrlKey && e.key === "U") // Ctrl+U
+    ) {
+      e.preventDefault();
+    }
+  });
 });
+
 
 async function initAuthUI() {
   const elLogin  = document.getElementById('auth-login');
